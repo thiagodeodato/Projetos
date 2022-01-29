@@ -1,23 +1,31 @@
-
-
 <template>
   <div class="body">
     <h1 class="centralized">{{ titulo }}</h1>
+    
+    <input type="search" class="filter" @input="picFilter = $event.target.value" placeholder="filtre pelo título">
     <ul class="pics-list">
-      <li class="pics-list-item" v-for="foto of fotos">
-        <div class="panel">
-          <h2 class="panel-title">{{ foto.titulo }}</h2>
-          <div class="panel-content">
-            <img class="responsive-image" :src="foto.url" :alt="foto.titulo">
-          </div>
-        </div>
+      <li class="pics-list-item" v-for="foto of filteredPics">
+      
+      <pic-panel :titulo="foto.titulo">
+        <responsive-image :url="foto.url" :titulo="foto.titulo"></responsive-image>
+      </pic-panel>
+      
       </li>
     </ul>
+  
   </div>
 </template>
 
 <script>
+import Panel from './components/shared/panel/Panel.vue';
+import ResponsiveImage from './components/shared/responsive-image/ResponsiveImage.vue';
+
 export default {
+
+  components: {
+    'pic-panel': Panel,
+    'responsive-image': ResponsiveImage
+  },
 
   data() {
     
@@ -25,7 +33,23 @@ export default {
       titulo: 'Galeria de Fotos',
       fotos: [
         
-      ]
+      ],
+      picFilter: ''
+      
+    }
+  },
+  
+  computed: {
+
+    filteredPics() {
+
+      if(this.picFilter) {
+        let exp = new RegExp(this.picFilter.trim(), 'i');
+        return this.fotos.filter(foto => exp.test(foto.titulo));
+      } else {
+        return this.fotos; 
+      }
+
     }
   },
 
@@ -64,28 +88,8 @@ export default {
     display: inline-block;
   }
 
-   .panel {
-    padding: 0 auto;
-    border: solid 2px grey;
-    display: inline-block;
-    margin: 5px;
-    box-shadow: 5px 5px 10px grey;
-    width: 200px;
-    height: 100%;
-    vertical-align: top;
-    text-align: center;
-  }
-
-  .panel .panel-title {
-    text-align: center;
-    border: solid 2px;
-    background: lightblue;
-    margin: 0 0 15px 0;
-    padding: 10px;
-    text-transform: uppercase;
-  }
-
-  .responsive-image {
-    width: 100%
+  .filter {
+    display: block;
+    width: 100%;
   }
 </style>
