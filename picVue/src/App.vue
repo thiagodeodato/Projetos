@@ -7,7 +7,7 @@
       <li class="pics-list-item" v-for="foto of filteredPics">
       
       <pic-panel :titulo="foto.titulo">
-        <responsive-image :url="foto.url" :titulo="foto.titulo"></responsive-image>
+        <responsive-image :url="foto.url" :titulo="foto.titulo"/>
       </pic-panel>
       
       </li>
